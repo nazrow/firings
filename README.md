@@ -1,1 +1,1 @@
-# firings
+# Ceramics firing calculator
