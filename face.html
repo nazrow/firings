@@ -6,16 +6,28 @@
     </head>
     <body>
         <h1>Калькулятор схемы обжига керамики</h1>
-        <div class="disclaimer">
-            <p>
-                Этот калькулятор написан человеком без практического опыта обжига керамики. Все основано на паре дней ресерча и инженерной интуиции, в расчетах использованы совершенно нигде не встречающиеся формулы авторского сочинения.
-                Используйте на свой страх и риск. По мере сбора опыта личных испытаний (и <a href="https://t.me/nazrow" target="_blank">фидбека</a> извне) калькулятор будет обновляться.
-            </p>
-            <p>Авторизация, сохранение истории и прочие свистелки не планируются. Хотите прикрутить — форкните <a href="https://github.com/nazrow/firings" target="_blank">репозиторий</a>.</p>
-        </div>
         <h3>Что жжем</h3>
-        <div id="goods"></div>
-        <button id="addgoods" onclick="addGoods()">+ еще одно изделие</button>
+        <div id="goods">
+            <div>
+                Состояние:
+                <select class="state" onchange="recalculate()">
+                    <option value="4">кожетвердое</option>
+                    <option value="3">сухое</option>
+                    <option value="0">обожженное (выше 600°C)</option>
+                </select>
+            </div>
+            <div>Вес: <input type="number" class="weight" onchange="recalculate()" value="300" />г</div>
+            <div>Средняя толщина стенки: <input type="number" class="thickness" onchange="recalculate()" value="2.8" />мм</div>
+            <div>
+                Глазурь:
+                <select class="glaze" onchange="recalculate()">
+                    <option value="0">отсутствует</option>
+                    <option value="1">простая</option>
+                    <option value="2">капризная</option>
+                    <option value="3">кристаллическая</option>
+                </select>
+            </div>
+        </div>
         <h3>Где жжем</h3>
         <div id="extras">
             <div>Объем муфеля: <input type="number" class="volume" onchange="recalculate()" value="15.6" />л</div>
@@ -27,12 +39,6 @@
                 Пиковая температура:
                 <input type="number" class="temperature" onchange="recalculate()" value="1235" />°C
             </div>
-            <div class="disclaimer">
-                <p>
-                    Выбор температуры и особенностей режима — полностью ваше дело. Помните: перегретая масса взрывается и/или плавится, перегретая глазурь кипит, отскребать это все от лещадки и муфеля потом вам же. Проверьте, что написано
-                    на упаковке от вашей массы, глазури, ангобов, краскок и пигментов.
-                </p>
-            </div>
             <div>
                 Темп:
                 <div class="temporangewithlegend">
@@ -40,10 +46,7 @@
                     <div class="tempolegend"><span class="slow">осторожный</span><span class="moderate">умеренный</span><span class="fast">торопливый</span></div>
                 </div>
             </div>
-            <div>Пропустить медленное выпаривание воды в начале: <input type="checkbox" class="check" onchange="recalculate()" /></div>
-
             <div>Пропустить аккуратное прохождение фазового перехода кварца на подъеме: <input type="checkbox" class="check" onchange="recalculate()" /></div>
-
             <div>Пропустить аккуратное прохождение фазового перехода кварца на спуске: <input type="checkbox" class="check" onchange="recalculate()" /></div>
         </div>
         <h3>Схема</h3>

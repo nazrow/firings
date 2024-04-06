@@ -89,7 +89,7 @@ option > span {
 .tempolegend > span {
     font-size: 0.8em;
     position: absolute;
-    top: -2em;
+    top: -1.5em;
 }
 .sphere,
 .slow {
