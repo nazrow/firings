@@ -33,7 +33,7 @@ function recalculate() {
 
     let extras = {};
     extras.weight = Number(extrasEl.getElementsByClassName("weight")[0].value) / 1000;
-    extras.volume = weight / 1950;
+    extras.volume = extras.weight / 1950;
     extras.surfaceArea = extras.volume / extras.thickness;
 
     let furnace = {};
