@@ -139,3 +139,5 @@ function recalculate() {
     console.log(chart);
     replaceChartData(chart, graphData);
 }
+
+recalculate();
