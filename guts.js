@@ -24,9 +24,9 @@ function callTempBracketByName(bracket, peak) {
 
 function recalculate() {
     let goods = {};
-    goods.water = stateEl.options[stateEl.selectedIndex].value;
     goods.weight = Number(goodsEl.getElementsByClassName("weight")[0].value) / 1000;
     goods.thickness = Number(goodsEl.getElementsByClassName("thickness")[0].value) / 1000;
+    goods.water = stateEl.options[stateEl.selectedIndex].value;
     goods.glaze = Number(glazeEl.options[glazeEl.selectedIndex].value);
     goods.inertia = Math.sqrt(goods.thickness ** 3 * goods.weight * 1600);
     goods.slower = 1 - Math.sqrt(Math.log(goods.inertia + 1));
@@ -34,8 +34,6 @@ function recalculate() {
 
     let extras = {};
     extras.weight = Number(extrasEl.getElementsByClassName("weight")[0].value) / 1000;
-    extras.volume = extras.weight / 1950;
-    extras.surfaceArea = extras.volume / extras.thickness;
 
     let furnace = {};
     furnace.volume = Number(extrasEl.getElementsByClassName("volume")[0].value) / 1000;
@@ -44,13 +42,8 @@ function recalculate() {
     furnace.weight = 350 * furnace.surfaceArea * furnace.thickness;
     furnace.maxLoad = furnace.volume * 1600;
     furnace.inertia = Math.sqrt(furnace.thickness ** 3 * furnace.weight * 400);
-    furnace.slower = 1 - Math.sqrt(Math.log(furnace.inertia + 1)) / 4 + 0.1 - (goods.weight + extras.weight) / furnace.maxLoad / 4;
+    furnace.slower = 1 - Math.sqrt(Math.log(furnace.inertia + 1)) / 4 + 0.1 - (goods.weight + extras.weight) / furnace.maxLoad / 5;
     console.log(`${furnace.volume * 1000} l furnace gives ${furnace.inertia} kg2, x${furnace.slower} slower`);
-
-    extras.thickness = 0.015 * (1 + furnace.volume / 0.5);
-    extras.inertia = Math.sqrt(extras.thickness ** 3 * extras.weight * 900);
-    extras.slower = 1 - Math.sqrt(Math.log(extras.inertia + 1)) / 2;
-    console.log(`${extras.weight * 1000} g extras gives ${extras.inertia} kg2, x${extras.slower} slower`);
 
     let params = {};
     params.peak = Number(parametersEl.getElementsByClassName("temperature")[0].value);
@@ -59,6 +52,9 @@ function recalculate() {
     params.skipBAPhase = parametersEl.getElementsByClassName("check")[1].checked;
 
     let temperatures = [20, Math.floor(params.peak), Math.floor(params.peak) - 1, 20];
+    if (goods.water > 0) {
+        temperatures.splice(0, 0, 90, 95, 110);
+    }
     if (!params.skipABPhase) {
         temperatures.splice(temperatures.length - 3, 0, 550, 600);
     }
@@ -76,21 +72,22 @@ function recalculate() {
 
 
     let speeds = {
-        "20-90": 150 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "20-550": 120 * params.tempo * (1 - goods.inertia / 0.11) * (1 - extras.inertia / 2),
-        "20-800": 120 * params.tempo * (1 - goods.inertia / 0.11) * (1 - extras.inertia / 2),
-        "20-peak": 120 * params.tempo * (1 - goods.inertia / 0.11) * (1 - extras.inertia / 2),
-        "90-110": 40 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "110-550": 170 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "110-800": 120 * params.tempo * (1 - goods.inertia / 0.11) * (1 - extras.inertia / 2),
-        "110-peak": 120 * params.tempo * (1 - goods.inertia / 0.11) * (1 - extras.inertia / 2),
-        "550-600": 60 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "600-800": 160 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "600-peak": 250 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "800-semipeak": 150 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "800-peak": 130 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "semipeak-peak": 80 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
-        "peak-underpeak": 2 * params.tempo * (1 - goods.inertia / 0.045) * (1 - extras.inertia / 0.9),
+        "20-90": 160 * params.tempo * goods.slower * furnace.slower,
+        "20-550": 200 * params.tempo * goods.slower * furnace.slower,
+        "20-800": 180 * params.tempo * goods.slower * furnace.slower,
+        "20-peak": 170 * params.tempo * goods.slower * furnace.slower,
+        "90-95": 5 / (goods.water + goods.thickness / 0.005 - 1),
+        "95-110": 40 * params.tempo * goods.slower * furnace.slower,
+        "110-550": 170 * params.tempo * goods.slower * furnace.slower,
+        "110-800": 120 * params.tempo * goods.slower * furnace.slower,
+        "110-peak": 120 * params.tempo * goods.slower * furnace.slower,
+        "550-600": 60 * params.tempo * goods.slower * furnace.slower,
+        "600-800": 160 * params.tempo * goods.slower * furnace.slower,
+        "600-peak": 250 * params.tempo * goods.slower * furnace.slower,
+        "800-semipeak": 150 * params.tempo * goods.slower * furnace.slower,
+        "800-peak": 130 * params.tempo * goods.slower * furnace.slower,
+        "semipeak-peak": 80 * params.tempo * goods.slower * furnace.slower,
+        "peak-underpeak": 2 * params.tempo * goods.slower * furnace.slower,
         "underpeak-900": 1000,
         "900-1030": 1000,
         "1030-1027": 1 * params.tempo,
@@ -101,7 +98,7 @@ function recalculate() {
         "underpeak-20": 450,
         "800-600": 750,
         "800-20": 400,
-        "600-550": 60 * params.tempo * (1 - goods.inertia / 0.09) * (1 - extras.inertia / 1.8),
+        "600-550": 60 * params.tempo * goods.slower * furnace.slower,
         "550-20": 350,
     };
     mode = [];
