@@ -4,23 +4,6 @@ const parametersEl = document.getElementById("parameters");
 const stateEl = goodsEl.getElementsByClassName("state")[0];
 const glazeEl = goodsEl.getElementsByClassName("glaze")[0];
 
-function callTempBracketByName(bracket, peak) {
-    semipeak = Math.floor(peak * 0.9);
-    underpeak = Math.floor(peak) - 1;
-    result = [null, null];
-    for (j = 0; j < bracket.length; j++) {
-        if (bracket[j] == semipeak) {
-            result[j] = "semipeak";
-        } else if (bracket[j] == underpeak) {
-            result[j] = "underpeak";
-        } else if (bracket[j] == Math.floor(peak)) {
-            result[j] = "peak";
-        } else {
-            result[j] = bracket[j];
-        }
-    }
-    return result[0] + "-" + result[1];
-}
 
 function recalculate() {
     let goods = {};
@@ -51,7 +34,7 @@ function recalculate() {
     params.skipABPhase = parametersEl.getElementsByClassName("check")[0].checked;
     params.skipBAPhase = parametersEl.getElementsByClassName("check")[1].checked;
 
-    let temperatures = [20, Math.floor(params.peak), Math.floor(params.peak) - 1, 20];
+    let temperatures = [20, "peak", "underpeak", 20];
     if (goods.water > 0) {
         temperatures.splice(1, 0, 90, 95, 110);
     }
@@ -59,7 +42,7 @@ function recalculate() {
         temperatures.splice(temperatures.length - 3, 0, 550, 600);
     }
     if (goods.glaze > 0) {
-        temperatures.splice(temperatures.length - 3, 0, 800, Math.floor(params.peak * 0.9));
+        temperatures.splice(temperatures.length - 3, 0, 800, "glazeentry");
     }
     if (goods.glaze == 2) {
         temperatures.splice(temperatures.length - 1, 0, 800);
@@ -85,11 +68,11 @@ function recalculate() {
         "600-peak": 250 * params.tempo * goods.slower * furnace.slower,
         "800-semipeak": 160 * params.tempo * goods.slower * furnace.slower,
         "800-peak": 150 * params.tempo * goods.slower * furnace.slower,
-        "semipeak-peak": 120 * params.tempo * goods.slower * furnace.slower,
+        "glazeentry-peak": 120 * params.tempo * goods.slower * furnace.slower,
         "peak-underpeak": 1.5 * params.tempo * goods.slower * furnace.slower,
         "underpeak-900": 1000,
         "900-1030": 1000,
-        "1030-1027": 1 * params.tempo,
+        "1030-1027": params.tempo,
         "1027-600": 900,
         "1027-20": 450,
         "underpeak-800": 150 * params.tempo,
@@ -102,10 +85,14 @@ function recalculate() {
     };
     mode = [];
     for (i = 0; i < temperatures.length - 1; i++) {
-        name = callTempBracketByName([temperatures[i], temperatures[i + 1]], params.peak);
-        speed = speeds[name];
-        timeDelta = Math.floor((Math.abs(temperatures[i + 1] - temperatures[i]) / speed) * 60);
-        mode.push([temperatures[i], (speed * (temperatures[i + 1] - temperatures[i])) / Math.abs(temperatures[i + 1] - temperatures[i]), timeDelta]);
+        bracket = `${temperatures[i]}-${temperatures[i + 1]}`;
+        speed = speeds[bracket];
+        ts = [
+            Math.floor(Number(temperatures[i].replace("underpeak", params.peak - 1).replace("peak", params.peak).replace("glazeentry", params.peak * 0.9))),
+            Math.floor(Number(temperatures[i+1].replace("underpeak", params.peak - 1).replace("peak", params.peak).replace("glazeentry", params.peak * 0.9)))
+        ];
+        timeDelta = Math.floor((Math.abs(ts[1] - ts[0]) / speed) * 60);
+        mode.push([ts[0], (speed * (ts[1] - ts[0])) / Math.abs(ts[1] - ts[0]), timeDelta]);
     }
     didCleans = true;
     while (didCleans) {
