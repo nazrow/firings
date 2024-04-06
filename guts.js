@@ -29,7 +29,7 @@ function recalculate() {
     goods.thickness = Number(goodsEl.getElementsByClassName("thickness")[0].value) / 1000;
     goods.glaze = Number(glazeEl.options[glazeEl.selectedIndex].value);
     goods.inertia = Math.sqrt(goods.thickness ** 3 * goods.weight * 1600);
-    goods.slower = 1 - Math.sqrt(Math.log(goods.inertia + 1)) / 2;
+    goods.slower = 1 - Math.sqrt(Math.log(goods.inertia + 1));
     console.log(`${goods.weight * 1000} g @ ${goods.thickness * 1000} mm gives ${goods.inertia} kg2, x${goods.slower} slower`);
 
     let extras = {};
@@ -44,12 +44,12 @@ function recalculate() {
     furnace.weight = 350 * furnace.surfaceArea * furnace.thickness;
     furnace.maxLoad = furnace.volume * 1600;
     furnace.inertia = Math.sqrt(furnace.thickness ** 3 * furnace.weight * 400);
-    furnace.slower = 1 - Math.sqrt(Math.log(furnace.inertia + 1)) / 2;
+    furnace.slower = 1 - Math.sqrt(Math.log(furnace.inertia + 1));
     console.log(`${furnace.volume * 1000} l furnace gives ${furnace.inertia} kg2, x${furnace.slower} slower`);
 
     extras.thickness = 0.015 * (1 + furnace.volume / 0.5);
     extras.inertia = Math.sqrt(extras.thickness ** 3 * extras.weight * 900);
-    extras.slower = 1 - Math.sqrt(Math.log(extras.inertia + 1)) / 2;
+    extras.slower = 1 - Math.sqrt(Math.log(extras.inertia + 1));
     console.log(`${extras.weight * 1000} g extras gives ${extras.inertia} kg2, x${extras.slower} slower`);
 
     let params = {};
