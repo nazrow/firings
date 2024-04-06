@@ -53,7 +53,7 @@ function recalculate() {
 
     let temperatures = [20, Math.floor(params.peak), Math.floor(params.peak) - 1, 20];
     if (goods.water > 0) {
-        temperatures.splice(0, 0, 90, 95, 110);
+        temperatures.splice(1, 0, 90, 95, 110);
     }
     if (!params.skipABPhase) {
         temperatures.splice(temperatures.length - 3, 0, 550, 600);
