@@ -44,12 +44,12 @@ function recalculate() {
     furnace.weight = 350 * furnace.surfaceArea * furnace.thickness;
     furnace.maxLoad = furnace.volume * 1600;
     furnace.inertia = Math.sqrt(furnace.thickness ** 3 * furnace.weight * 400);
-    furnace.slower = 1 - Math.sqrt(Math.log(furnace.inertia + 1));
+    furnace.slower = 1 - Math.sqrt(Math.log(furnace.inertia + 1)) / 4;
     console.log(`${furnace.volume * 1000} l furnace gives ${furnace.inertia} kg2, x${furnace.slower} slower`);
 
     extras.thickness = 0.015 * (1 + furnace.volume / 0.5);
     extras.inertia = Math.sqrt(extras.thickness ** 3 * extras.weight * 900);
-    extras.slower = 1 - Math.sqrt(Math.log(extras.inertia + 1));
+    extras.slower = 1 - Math.sqrt(Math.log(extras.inertia + 1)) / 2;
     console.log(`${extras.weight * 1000} g extras gives ${extras.inertia} kg2, x${extras.slower} slower`);
 
     let params = {};
