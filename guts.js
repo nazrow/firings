@@ -13,7 +13,6 @@ function recalculate() {
     goods.glaze = Number(glazeEl.options[glazeEl.selectedIndex].value);
     goods.inertia = Math.sqrt(goods.thickness ** 3 * goods.weight * 1600);
     goods.slower = 1 - Math.sqrt(Math.log(goods.inertia + 1));
-    console.log(`${goods.weight * 1000} g @ ${goods.thickness * 1000} mm gives ${goods.inertia} kg2, x${goods.slower} slower`);
 
     let extras = {};
     extras.weight = Number(extrasEl.getElementsByClassName("weight")[0].value) / 1000;
@@ -26,7 +25,6 @@ function recalculate() {
     furnace.maxLoad = furnace.volume * 1600;
     furnace.inertia = Math.sqrt(furnace.thickness ** 3 * furnace.weight * 400);
     furnace.slower = 1 - Math.sqrt(Math.log(furnace.inertia + 1)) / 4 + 0.1 - (goods.weight + extras.weight) / furnace.maxLoad / 5;
-    console.log(`${furnace.volume * 1000} l furnace gives ${furnace.inertia} kg2, x${furnace.slower} slower`);
 
     let params = {};
     params.peak = Number(parametersEl.getElementsByClassName("temperature")[0].value);
@@ -110,7 +108,6 @@ function recalculate() {
         mode = modeCleaned;
     }
     mode.push([20, 0, 0]);
-    console.log(mode);
     time = 0;
     tabularData = "";
     graphData = [];
@@ -123,7 +120,6 @@ function recalculate() {
     }
     var table = document.getElementsByTagName("tbody")[0];
     table.innerHTML = tabularData;
-    console.log(chart);
     replaceChartData(chart, graphData);
 }
 
