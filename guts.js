@@ -70,13 +70,13 @@ function recalculate() {
         temperatures.splice(temperatures.length - 1, 0, 600, 550);
     }
 
-    console.log(`5 / (${goods.water} + ${goods.thickness} / 0.005 - 1) = ${5 / (goods.water + goods.thickness / 0.005 - 1)}`)
+    console.log(`5 / (${goods.water} + ${goods.thickness} / 0.005 - 1) = ${5 / (goods.water - 1 + goods.thickness / 0.005)}`)
     let speeds = {
         "20-90": 160 * params.tempo * goods.slower * furnace.slower,
         "20-550": 200 * params.tempo * goods.slower * furnace.slower,
         "20-800": 180 * params.tempo * goods.slower * furnace.slower,
         "20-peak": 170 * params.tempo * goods.slower * furnace.slower,
-        "90-95": 5 / (goods.water + goods.thickness / 0.005 - 1),
+        "90-95": 5 / (goods.water - 1 + goods.thickness / 0.005),
         "95-110": 40 * params.tempo * goods.slower * furnace.slower,
         "110-550": 170 * params.tempo * goods.slower * furnace.slower,
         "110-800": 120 * params.tempo * goods.slower * furnace.slower,
