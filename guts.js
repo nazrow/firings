@@ -70,24 +70,23 @@ function recalculate() {
         temperatures.splice(temperatures.length - 1, 0, 600, 550);
     }
 
-    console.log(`5 / (${goods.water} + ${goods.thickness} / 0.005 - 1) = ${5 / (goods.water - 1 + goods.thickness / 0.005)}`)
     let speeds = {
         "20-90": 160 * params.tempo * goods.slower * furnace.slower,
         "20-550": 200 * params.tempo * goods.slower * furnace.slower,
         "20-800": 180 * params.tempo * goods.slower * furnace.slower,
         "20-peak": 170 * params.tempo * goods.slower * furnace.slower,
-        "90-95": 5 / (goods.water - 1 + goods.thickness / 0.005),
+        "90-95": 5 / (goods.water - 1 + goods.thickness / 0.005) * params.tempo,
         "95-110": 40 * params.tempo * goods.slower * furnace.slower,
         "110-550": 170 * params.tempo * goods.slower * furnace.slower,
-        "110-800": 120 * params.tempo * goods.slower * furnace.slower,
-        "110-peak": 120 * params.tempo * goods.slower * furnace.slower,
-        "550-600": 60 * params.tempo * goods.slower * furnace.slower,
-        "600-800": 160 * params.tempo * goods.slower * furnace.slower,
+        "110-800": 180 * params.tempo * goods.slower * furnace.slower,
+        "110-peak": 170 * params.tempo * goods.slower * furnace.slower,
+        "550-600": 90 * params.tempo * goods.slower * furnace.slower,
+        "600-800": 180 * params.tempo * goods.slower * furnace.slower,
         "600-peak": 250 * params.tempo * goods.slower * furnace.slower,
-        "800-semipeak": 150 * params.tempo * goods.slower * furnace.slower,
-        "800-peak": 130 * params.tempo * goods.slower * furnace.slower,
-        "semipeak-peak": 80 * params.tempo * goods.slower * furnace.slower,
-        "peak-underpeak": 2 * params.tempo * goods.slower * furnace.slower,
+        "800-semipeak": 160 * params.tempo * goods.slower * furnace.slower,
+        "800-peak": 150 * params.tempo * goods.slower * furnace.slower,
+        "semipeak-peak": 120 * params.tempo * goods.slower * furnace.slower,
+        "peak-underpeak": 1.5 * params.tempo * goods.slower * furnace.slower,
         "underpeak-900": 1000,
         "900-1030": 1000,
         "1030-1027": 1 * params.tempo,
@@ -98,7 +97,7 @@ function recalculate() {
         "underpeak-20": 450,
         "800-600": 750,
         "800-20": 400,
-        "600-550": 60 * params.tempo * goods.slower * furnace.slower,
+        "600-550": 110 * params.tempo * goods.slower * furnace.slower,
         "550-20": 350,
     };
     mode = [];
@@ -131,7 +130,9 @@ function recalculate() {
     for (i = 0; i < modeCleaned.length; i++) {
         graphData.push({ x: time, y: Math.floor(mode[i][0]) });
         time += mode[i][2] / 60;
-        tabularData += `<tr><td>${i}</td><td>${Math.floor(mode[i][0])}</td><td>${Math.floor(mode[i][1])}</td><td>${Math.floor(mode[i][2])}</td><td>${time.toFixed(1)}</td></tr>`;
+        if (i < modeCleaned.length - 1) {
+            tabularData += `<tr><td>${i}</td><td>${Math.floor(mode[i][0])}</td><td>${mode[i][1].toFixed(1)}</td><td>${Math.floor(mode[i][2])}</td><td>${time.toFixed(1)}</td></tr>`;
+        }
     }
     var table = document.getElementsByTagName("tbody")[0];
     table.innerHTML = tabularData;
