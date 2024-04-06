@@ -88,8 +88,8 @@ function recalculate() {
         bracket = `${temperatures[i]}-${temperatures[i + 1]}`;
         speed = speeds[bracket];
         ts = [
-            Math.floor(Number(temperatures[i].replace("underpeak", params.peak - 1).replace("peak", params.peak).replace("glazeentry", params.peak * 0.9))),
-            Math.floor(Number(temperatures[i+1].replace("underpeak", params.peak - 1).replace("peak", params.peak).replace("glazeentry", params.peak * 0.9)))
+            Math.floor(Number(String(temperatures[i]).replace("underpeak", params.peak - 1).replace("peak", params.peak).replace("glazeentry", params.peak * 0.9))),
+            Math.floor(Number(String(temperatures[i+1]).replace("underpeak", params.peak - 1).replace("peak", params.peak).replace("glazeentry", params.peak * 0.9)))
         ];
         timeDelta = Math.floor((Math.abs(ts[1] - ts[0]) / speed) * 60);
         mode.push([ts[0], (speed * (ts[1] - ts[0])) / Math.abs(ts[1] - ts[0]), timeDelta]);
