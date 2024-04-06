@@ -66,7 +66,7 @@ function recalculate() {
         "550-600": 90 * params.tempo * goods.slower * furnace.slower,
         "600-800": 180 * params.tempo * goods.slower * furnace.slower,
         "600-peak": 250 * params.tempo * goods.slower * furnace.slower,
-        "800-semipeak": 160 * params.tempo * goods.slower * furnace.slower,
+        "800-glazeentry": 160 * params.tempo * goods.slower * furnace.slower,
         "800-peak": 150 * params.tempo * goods.slower * furnace.slower,
         "glazeentry-peak": 120 * params.tempo * goods.slower * furnace.slower,
         "peak-underpeak": 1.5 * params.tempo * goods.slower * furnace.slower,
